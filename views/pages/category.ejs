@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="mainController" ng-click="hideStuff($event)">
+  <head>
+    <title><%=result.name%> Tasks</title>
+    <% include ../partials/include %>
+    <script src="/js/category.js"></script>
+  </head>
+  <body ng-click="categoriesOverlayRemover()">
+    <% include ../partials/topbar %>
+    <div class="main-show-board-2">
+      <img src="images/categories/<%=result.name%>-banner.png"/>
+      <div style="padding:10px;position:relative;top:-300px;">
+      <h1 class="color-white text-center"><b><%=result.name%> Tasks</b></h1><br>
+    </div>
+    </div>
+    <div class="container">
+      <br>
+      <br>
+      <br><br>
+      <br>
+    <h1 class="font-bold color-blue font-20">Description</h1>
+    <%
+        if(result.description)
+        {
+          %>
+          <p><%=result.description%></p>
+          <%
+        }
+      %>
+    </div>
+    <br>
+    <div class="container"  style="min-height:50%">
+      <div class="row">
+        <% for(var i=0;i<result.subcategories.length;i++){
+
+          %>
+          <div class="col-sm-4 padding-10 text-center">
+            <button class="btn-design background-color-blue color-white" style="width:80%;" onclick="window.location.href='/<%=result.name%>/<%=result.subcategories[i].name%>';"><%=result.subcategories[i].name%></button>
+          </div>
+          <%
+
+        }%>
+      </div>
+    </div>
+    <% include ../partials/footer %>
+    <% include ../partials/signUp %>
+    <% include ../partials/bottomBar %>
+
+  </body>
+</html>

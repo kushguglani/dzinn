@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="mainController" ng-click="hideStuff($event)">
+  <head>
+    <title><%=result.name%> Tasks</title>
+    <script>
+      var category='<%=category%>';
+      var subcategory='<%=subcategory%>';
+    </script>
+    <% include ../partials/include %>
+    <script src="/js/category.js"></script>
+  </head>
+  <body ng-click="categoriesOverlayRemover()">
+    <% include ../partials/topbar %>
+    <div class="main-show-board-2">
+      <img src="/images/categories/<%=category%>/<%=result.name%>-banner.png"/>
+      <div style="padding:10px;position:relative;top:-300px;">
+      <h1 class="color-white text-center"><b><%=result.name%> Tasks</b></h1><br>
+    </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+    <h1 class="font-bold color-blue font-20">Description</h1>
+    <%
+    if(result.description)
+    {
+      %>
+      <p><%=result.description%></p>
+      <%
+    }
+     %>
+  </div>
+    <br>
+    <div class="container" ng-controller="displayTasksController" style="min-height:100%;">
+      <div class="row">
+        <div class="col-sm-12 clearfix" style="position:relative;">
+            <span class="float-right cursor-pointer color-blue font-bold font-20" ng-click="showFilter()">Filter</span>
+            <div ng-style="filterStyle" class="float-right background-color-white padding-20 border-radius-10 filter">
+              <p><b>Task Type</b>
+                <select class="form-control" ng-model="taskType"> 
+                    <option value="Online">Online</option>
+                    <option value="Offline">Offline</option>
+                  </select>
+              </p>
+            <p><b>Cost: {{taskCost}} (&euro;) (Min)</b>
+                <input type="range" class="form-control" ng-model="taskCost" min="100" max="1000"/>
+              </p>
+              <p ng-show="taskType=='Offline'"><b>Distance: {{taskDistance}} KM (Min)</b><input type="range" min="1" max="10" steps="1" ng-model="taskDistance" class="form-control"/>
+                <span style="color:#e74c3c;">{{locationError}}</span>
+              </p>
+              <button class="btn-design background-color-blue color-white" style="width:100px;display:inline-block;" ng-click="applyFilter()">Apply</button>&nbsp;&nbsp;<button class="btn-design background-color-grey color-white" style="width:100px;display:inline-block;" ng-click="hideFilter()">Cancel</button>
+              
+            </div>
+          </div>
+      </div>
+      <br>
+        <div class="row cursor-pointer background-color-white margin-bottom-20 padding-20 border-radius-10" ng-repeat="x in tasks" ng-if="show" ng-click="redirect(x)">
+          
+          <div class="col-sm-12">
+              <p class="font-20 font-bold">{{x.title}} <span ng-if="x.distance!=undefined">({{x.distance}} KM Away)</span></p>
+              <p class="font-16">{{x.Description}}</p>
+              <br>
+              <div class="row">
+                <div class="col-sm-4">
+                  <p class="font-16 font-bold">Cost (&euro;)</p>
+                  <p class="border-grey-half background-color-white padding-10 border-radius-10 font-16 font-bold">{{x.Cost=='N/A'?'Open for biding':x.Cost}}</p>
+                </div>
+                <div class="col-sm-4">
+                    <p class="font-16 font-bold">Due Date</p>
+                    <p class="border-grey-half background-color-white padding-10 border-radius-10 font-16 font-bold">{{x.dueDate}}</p>
+                </div>
+                <div class="col-sm-4">
+                  <p></p>
+                  <br>
+                  <button ng-show="!checkVar(x.assignedTo)" class="btn-design background-color-blue color-white" style="width:200px;">{{x.postedBy==userId?'Delete':'Make an Offer'}}</button>
+                </div>
+              </div>
+          </div>  
+        </div>
+        <div class="row" ng-if="!show">
+          <div class="col-sm-12 text-center">
+              <i class="font-36 color-blue fa fa-spin fa-spinner"></i>
+          </div>
+        </div>
+        <div class="row" ng-if="tasks.length==0&&show">
+          <div class="col-sm-12 text-center">
+            <p class="font-28 color-blue font-bold">No tasks found!</p>
+          </div>
+        </div>
+    </div>
+    <% include ../partials/footer %>
+    <% include ../partials/signUp %>
+    <% include ../partials/bottomBar %>
+    <script src="/js/subcategory.js"></script>
+  </body>
+</html>

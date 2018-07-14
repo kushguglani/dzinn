@@ -1,0 +1,9 @@
+.filter
+{
+    position: absolute;
+    width:300px;
+    z-index:5;
+    right:0px;
+    top:30px;
+    overflow: hidden;
+}

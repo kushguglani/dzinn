@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="mainController" ng-click="hideStuff($event)">
+  <head>
+    <title>Welcome to DZINN</title>
+    <% include ../partials/include %>
+  </head>
+  <body ng-click="categoriesOverlayRemover()">
+    <% include ../partials/topbar %>
+    <div class="main-container" style="height:61vh;">
+        <div class="sub-container">
+          <div class="sub-container-small">
+            <a href="/about"><div class="sub-container-small__sections">About</div></a>
+            <a href="/help"><div class="sub-container-small__sections sub-container-small__sections_selected">Help</div></a>
+            <a href="/privacy"><div class="sub-container-small__sections">Privacy</div></a>
+            <a href="faq"> <div class="sub-container-small__sections">FAQs</div></a>
+          </div>
+          <div class="sub-container-large">
+                <h3 style="color: #1c8de9">Help</h3>
+                DZINN only connects costumers with the best, most skilled and trustworthy professionals. We guarantee 100% satisfaction. In case of questions or concerns, please get in touch and we will help you in any way we can.          
+            </div>
+        </div>
+      </div>
+      <% include ../partials/footer %>
+      <% include ../partials/signUp %>
+      <% include ../partials/bottomBar %>
+  </body>
+  </html>

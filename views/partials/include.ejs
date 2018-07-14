@@ -1,0 +1,196 @@
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="shortcut icon" href="/icons/logo.png"/>
+<link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="/css/tether.css"/>
+<link rel="stylesheet" href="/css/common.css"/>
+<link rel="manifest" href="/manifest.json">
+<script src="/js/angular.js"></script>
+<script src="/js/angular-route.js"></script>
+<script src="/js/jquery.js"></script>
+<script src="/js/tether.js"></script>
+<script src="/js/popper.min.js" ></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/accountController.js"></script>
+<%
+
+    if(typeof data=='undefined')
+    {
+
+            %>
+            
+            
+            <script src="https://apis.google.com/js/platform.js" async defer></script>
+            <meta name="google-signin-client_id" content="1084503627756-cfh58c39e0becqomp0tulrdpq46ngj6t.apps.googleusercontent.com">
+            <script>
+                    var userGoogleId=null;
+    var allowGoogle=false;
+    var userGoogleName=null;
+    var userGoogleEmail=null;
+    var userGoogleContact=null;
+    var otpCode=null;
+function sendOTP()
+{
+    var ajax=new XMLHttpRequest();
+        window.otpCode=Math.floor(100000 + Math.random() * 900000);
+  ajax.open('POST','/sendOtp',true);
+  ajax.onreadystatechange=function()
+  {
+      if(ajax.readyState==4&&ajax.status==200)
+      {
+          let response=JSON.parse(ajax.responseText);
+          if(response.result)
+          {
+                $('#otp-box').html(`     <input type="number" style="display:block;width:100%;" id="otp-input" placeholder="Enter OTP"/>
+            <br/>
+            <button class="sign-up-button" style="width:200px;" onclick="completeGoogle(this,true)">Verify</button>
+            <br/>
+            <br/>
+            <button class="sign-up-button" style="width:200px;" onclick="completeGoogle(null)">Resend OTP</button>`);
+          }
+          else
+          {
+            $('#phoneNumberModalAlert').html("Maximum SMS limit in a day limit reached for this number. Try again tomorrow!");
+
+          }
+         
+      }
+  }
+  ajax.setRequestHeader('Content-type','application/json; charset=utf-8');
+  ajax.send(JSON.stringify({number:document.querySelector('#complete-code').value.trim()+document.querySelector('#complete-contact').value.trim(),body:"Your DZINN Verification Code is "+window.otpCode}));
+
+}
+function completeGoogle(button,register)
+{
+    if(allowGoogle)
+    {
+        $('#phoneNumberModalAlert').html("");
+    if(document.querySelector('#complete-contact').value.trim()!='')
+    {
+        if((document.querySelector('#complete-contact').value.trim().length===9&&$('#complete-code').val()==="+353")||(document.querySelector('#complete-contact').value.trim().length===10&&$('#complete-code').val()!=="+353"))
+        {
+                if(register)
+                {
+                            if(document.querySelector('#otp-input').value.trim()===window.otpCode.toString())
+                            {
+
+                                    
+
+                        button.innerHTML="<i class='fa fa-cog fa-spin'></i>";
+        button.disabled=true;
+        $('.loader-cover').css('display','block');
+        var ajax=new XMLHttpRequest();
+  ajax.open('POST','/completeGoogle',true);
+  ajax.onreadystatechange=function()
+  {
+      if(ajax.readyState==4&&ajax.status==200)
+      {
+            window.location.reload();
+ 
+      }
+  }
+  ajax.setRequestHeader('Content-type','application/json; charset=utf-8');
+  ajax.send(JSON.stringify({userGoogleContact:document.querySelector('#complete-code').value.trim()+document.querySelector('#complete-contact').value.trim(),userGoogleId:userGoogleId,userGoogleName:userGoogleName,userGoogleEmail:userGoogleEmail}));
+
+
+                            }
+                            else
+                            {
+                                $('#phoneNumberModalAlert').html("Invalid OTP");
+
+                            }
+
+                }
+                else
+                    sendOTP();
+
+        }
+        else
+        {
+            $('#phoneNumberModalAlert').html("Invalid phone number");
+        }
+
+    }
+    else
+    {
+        $('#phoneNumberModalAlert').html("Enter the phone number");
+ 
+    }
+}
+}
+function onSignIn(googleUser) {
+    if(allowGoogle)
+    {
+    var profile = googleUser.getBasicProfile();
+  userGoogleId=googleUser.getAuthResponse().id_token;
+  userGoogleName=profile.getName();
+  userGoogleEmail=profile.getEmail();
+  var ajax=new XMLHttpRequest();
+  ajax.open('POST','/checkGoogleLogIn',true);
+  ajax.onreadystatechange=function()
+  {
+      if(ajax.readyState==4&&ajax.status==200)
+      {
+          if(JSON.parse(ajax.responseText).result)
+          {
+            $('.loader-cover').css('display','block');
+            window.location.reload();
+          }
+          else
+          {
+              //Get the Phone Number
+              $('#phoneNumberModal').modal('show');
+          }
+      }
+  }
+  ajax.setRequestHeader('Content-type','application/json; charset=utf-8');
+  ajax.send(JSON.stringify({userGoogleId:userGoogleId,userGoogleName:userGoogleName,userGoogleEmail:userGoogleEmail,authenticate:'110ec58a-b123-4ac4-7171-c87q4we3b8d1'}));
+}
+}
+function googleSignIn()
+{
+    
+    userGoogleId=null;
+    userGoogleName=null;
+    userGoogleEmail=null;
+    allowGoogle=true;
+    document.querySelector('.abcRioButtonContentWrapper').click();    
+    
+}
+
+            </script>    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <%
+
+
+    }
+
+%>
+<script>
+var userId='<%=(typeof data=="undefined"||data==null)?"No":data._id%>';
+var userName='<%=(typeof data=="undefined"||data==null)?"No":data.name%>';
+$(document).ready(()=>{
+    let options="";
+    $.get("/json/country-codes.json",(data)=>{
+        for(let i=0;i<data.length;i++)
+        {
+            if(data[i].dial_code==="+353")
+            options+="<option value='"+data[i].dial_code+"' selected>("+data[i].dial_code+") "+data[i].name+"</option>";
+            else
+            options+="<option value='"+data[i].dial_code+"'>("+data[i].dial_code+") "+data[i].name+"</option>";
+        }
+        $('#complete-code').html(options);
+    });
+  
+
+});
+</script>

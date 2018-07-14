@@ -1,0 +1,45 @@
+.background-color-white
+{
+  background-color: white !important;
+}
+.border-grey-half
+{
+    border:0.5px solid rgb(154,162,165) !important;
+}
+.color-grey
+{
+  color:rgb(154,162,165) !important;
+}
+.background-color-grey
+{
+  background-color:rgb(154,162,165) !important;
+}
+.color-blue
+{
+  color:#0d92e5 !important;
+}
+.color-blue-bg
+{
+  background-color:#0d92e5 !important;
+}
+.notification-bg
+{
+  background-color: #e0e0e0  !important;
+}
+.light-grey-color-bg
+{
+  background-color:rgb(232,232,232);
+}
+
+.light-grey-color-text
+{
+  color:rgb(232,232,232);
+}
+.text-color-white
+{
+  color:white;
+}
+.red-color-text
+{
+  color:#f44336;
+}

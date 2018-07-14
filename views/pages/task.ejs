@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="mainController" ng-click="hideStuff($event)">
+  <head>
+    <title><%=result[0].title%></title>
+    <script>
+        var taskId='<%=result[0]._id%>';
+        var postedBy='<%=result[0].postedBy%>';
+        var bidType='<%=result[0].bidType%>';
+        var title='<%=result[0].title%>';
+        var description='<%=result[0].Description%>';
+        var dueDate='<%=result[0].dueDate%>';
+        var Cost='<%=result[0].Cost%>';
+        var showPaymentModal='<%=payment%>';
+        var tags='<%=result[0].tags%>'.length>0?'<%=result[0].tags%>'.split(','):[];
+        var taskAddress='<%=(typeof result[0].taskAddress=="undefined"||result[0].taskAddress==null)?"No":result[0].taskAddress%>';
+    </script>
+    <% include ../partials/include %>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script src="/js/task.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaPcCIb_JIRvrEEPCRJ6Sra55YY9gW1Pk&libraries=places"></script>
+    <style>
+      a:hover
+      {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body ng-click="categoriesOverlayRemover()">
+    <% include ../partials/topbar %>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="container" ng-controller="task-edit-controller">
+      <br/>
+      <div class="row">
+        <div class="col-sm-12">
+            <p class="color-blue font-bold font-20 clearfix">
+                <a href="/profile/<%=userData[0]._id%>" target="_blank"><img class="img-rounded" ng-src="/userImages/<%=userData[0]._id%>.png?v={{currentTime}}" style="width:64px;display:inline-block;"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <%=userData[0].name%></a>
+                <%
+                  if(!result[0].assignedTo&&data&&data._id==result[0].postedBy)
+                  {
+                    %>
+                    <button class="btn-design padding-10 color-blue-bg float-right text-color-white" style="width:100px" ng-click="deleteTask('<%=result[0]._id%>')" ng-controller="delete-task-controller">Delete</button>
+                    <span class="float-right">&nbsp;&nbsp;</span>       
+                    <button class="btn-design padding-10 color-blue-bg float-right text-color-white" style="width:100px" ng-click="saveTask()">Save</button>
+                    <%
+                  }
+                %>
+            </p>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <p class="font-18"><b>Title</b></p>
+          <%
+          if(!result[0].assignedTo&&data&&data._id==result[0].postedBy)
+          {
+            %>
+              <input type="text" class="form-control" placeholder="Title" ng-model="title"/>
+              <br/>
+            <%
+          }
+          else
+          {
+              %>
+              <p><%=result[0].title%></p>
+              <%
+          }
+        %>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-12">
+            <p class="font-18"><b>Description</b></p>
+                      <%
+          if(!result[0].assignedTo&&data&&data._id==result[0].postedBy)
+          {
+            %>
+            <textarea class="form-control" placeholder="Enter description here" rows="5" ng-model="description"></textarea>
+              <br/>
+            <%
+          }
+          else
+          {
+              %>
+              <p><%=result[0].Description%></p>
+              <%
+          }
+          %>
+          </div>
+        </div>
+        <%
+          if(result[0].taskType=='offline')
+          {
+        %>
+        <div class="row">
+          <div class="col-sm-12">
+              <p class="font-18"><b>Task Address</b></p>
+              <%
+              if(!result[0].assignedTo&&data&&data._id==result[0].postedBy)
+              {
+                %>
+                <input type="text" class="form-control" placeholder="Search for a place" ng-model="taskAddress" id="placeSearch" value="<%=result[0].taskAddress%>"/>
+                  <br/>
+                <%
+              }
+              else
+              {
+                  %>
+                  <p><%=result[0].taskAddress%></p>
+                  <%
+              }
+              %>
+            </div>
+        </div>
+        <%
+          }
+        %>
+        <%
+        if(!result[0].assignedTo&&data&&data._id==result[0].postedBy)
+        {
+          %>
+          <div class="row">
+            <div class="col-sm-12">
+              <p class="font-18"><b>Tags</b></p>
+              <input type="text" class="form-control" placeholder="Search for tags (#Tag)" ng-model="tagsSearch" ng-keyup="tagMagic($event)"/>
+              <div class="tag-overlay" ng-style="tagOverlayStyle">
+                <p ng-repeat="x in dbTags" ng-click="addSelectedTag(x.tagName)">{{x.tagName}}</p>
+              </div>
+              <div class="tags clearfix">
+                  <span class="selectedTag" ng-repeat="x in tags"><span>{{x}}</span>&nbsp;&nbsp;<span class="cursor-pointer" ng-click="removeSelectedTag($index)">X</span></span>
+              </div>
+            </div>
+          </div>
+
+          <%
+        }
+        else
+        {
+            %>
+            <%
+            if(result[0].tags&&result[0].tags.length)
+            {
+              %>
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="font-18"><b>Tags</b></p>
+                    <p>
+                      <%
+                     result[0].tags.forEach(function(item,index){
+                         if(index!=0)
+                         {
+                           %>
+                            , 
+                           <%
+                         }
+                      %>
+                    <%=item%>
+                      <%
+                     });
+                      %>
+                    </p>
+                </div>
+              </div>
+             <%
+             } 
+             %>
+
+            <%
+        }
+        %>
+
+        <div class="row">
+            <div class="col-sm-4">
+              <p class="font-18"><b>Cost (&euro;)</b></p>
+              <%
+              if(!result[0].assignedTo&&data&&data._id==result[0].postedBy)
+              {
+                %>
+                  <input type="text" class="form-control" placeholder="Cost" ng-model="Cost"/>
+                  <br/>
+                <%
+              }
+              else
+              {
+                  %>
+                  <p class="background-color-white border-radius-10 padding-10"><%=result[0].Cost!='N/A'?result[0].Cost:'Open for bidding'%></p>
+                  <%
+              }
+            %>
+            </div>
+            <div class="col-sm-4">
+                <p class="font-18"><b>Due Date</b></p>
+                <%
+                if(!result[0].assignedTo&&data&&data._id==result[0].postedBy)
+                {
+                  %>
+                    <input type="date" class="form-control" ng-model="dueDate"/>
+                    <br/>
+                  <%
+                }
+                else
+                {
+                    %>
+                    <p class="background-color-white border-radius-10 padding-10"><%=result[0].dueDate%></p>
+                    <%
+                }
+              %>
+            </div>
+          </div>
+        <div ng-controller="sendMessageController">
+            <div class="row" ng-if="data.length>0">
+                <div class="col-sm-12">
+                  <p class="font-18"><b>Recent Bidding:</b></p>
+                  <hr>
+                </div>
+              </div>
+              <div class="row" ng-repeat="x in data">
+              <div class="col-sm-12">
+                  <div class="row" ng-class="{'background-color-white':x.highLight==true}" style="padding-top:10px;position:relative;">
+                  <div class="col-sm-8" style="position:static;">
+                  <p class="font-16"><span class="font-bold"><img src="/icons/check.png" ng-show="x.highLight" style="width:40px;position:absolute;right:0px;top:-15px;"/><a href="/profile/{{x.messageBy}}" target="_blank">{{x.name}}</a> on</span> <span class="color-grey">{{formatDate(x.date)}}</span></p>
+                  <p class="font-14 color-grey">{{x.message.trim()==''?'None':x.message}}</p>
+                  <div ng-show="userId==x.messageBy&&!taskDetails.assignedTo" >
+                  <br/>
+                  <p class="font-bold">Edit Message</p>
+                  <input type="text" class="form-control" ng-model="x.message" placeholder="Type Here"/>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <p class="font-16 font-bold">Cost &euro;</p>
+                  <p class="background-color-white padding-10 border-radius-10">{{x.cost==null?'None':x.cost}}</p>
+                  <div ng-show="userId==x.messageBy&&!taskDetails.assignedTo" >
+                      <p class="font-bold">Edit Cost</p>
+                      <input type="number" class="form-control" ng-model="x.cost" placeholder="Cost"/>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <br>
+                  <p></p>
+                  <%
+                    if(!result[0].assignedTo)
+                    {
+                      %>
+                      <button ng-if="userId==postedBy&&x.allow!=false" ng-click="acceptBid(x)" style="width:100px" class="btn-design background-color-blue color-white border-radius-10">Accept</button>
+                      <%
+                    }
+                  %>
+                  <div ng-show="userId==x.messageBy&&!taskDetails.assignedTo" >
+                      <br/>
+                      <br/><br/><br/>
+                  <button ng-click="updateBid($index)" class="btn-design background-color-blue color-white border-radius-10">Update Bid</button>
+                    </div>
+                </div>
+                </div>
+                <hr/>
+                </div>
+              </div>
+              <div class="row" ng-if="data.length==0&&bidType=='open'">
+                <div class="col-sm-12">
+                  <p class="text-center color-blue font-20 font-bold">There are no bids on this task yet!</p>
+                </div>
+              </div>
+              <div class="row" ng-if="data.length==0&&bidType=='closed'">
+                <div class="col-sm-12">
+                  <p class="text-center color-blue font-20 font-bold">This task has closed bids hence, you won't be able to see other bids.</p>
+                </div>
+              </div>
+        <div class="row" ng-show="!blockMessaging&&allowMessaging&&showMessagingBox">
+          <div class="col-sm-8">
+            <p class="font-18"><b>Description</b></p>
+            <input type="text" class="form-control" ng-model="description" placeholder="Type Here"/>
+          </div>
+          <div class="col-sm-2">
+              <p class="font-18"><b>Cost &euro;</b></p>
+              <input type="number" class="form-control" ng-model="cost" placeholder="Cost"/>
+          </div>
+          <div class="col-sm-2">
+            <p></p>
+            <br/>
+            <button class="btn-design background-color-blue color-white" style="width:80%;" ng-click="sendMessage()" ng-if="!sending">Send</button>  
+            <button class="btn-design background-color-blue color-white" style="width:80%;" ng-if="sending"><i class="fa fa-spinner fa-spin"></i></button>  
+          </div> 
+          <br>
+          
+          </div>
+          <div class="row" ng-show="!blockMessaging&&!allowMessaging&&showMessagingBox">         
+             <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-12">
+                  <p class="font-20 color-blue text-center font-bold">Please, Log In to post a bid.</p>  
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    </div>
+    <br>
+    <div class="modal fade" id="confirmModal">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <img src="/icons/check.png" style="display:block;margin:auto;"/>
+              <br>
+              <p class="text-center font-bold">Message Sent Successfully!</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary background-color-blue" data-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="paymentModal">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <img src="/icons/check.png" style="display:block;margin:auto;"/>
+                <br>
+                <p class="text-center font-bold">Payment successful!</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary background-color-blue" data-dismiss="modal">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+    <% include ../partials/footer %>
+    <% include ../partials/signUp %>
+    <% include ../partials/bottomBar %>
+
+  </body>
+</html>

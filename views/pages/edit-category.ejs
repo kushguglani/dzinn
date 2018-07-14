@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-click="hideStuff($event)">
+  <head>
+    <title>Admin Portal</title>
+    <% include ../partials/include %>
+    <link rel="stylesheet" href="css/admin.css"/>
+    <script src="/js/edit-category.js"></script>
+    <script src="/js/admin.js"></script>
+    
+    </head>
+  <body>
+    <div class="container padding-20">
+        <div class="row">
+            <div class="col-sm-3 background-color-white padding-10">
+                <img src="/icons/logo.png" style="width:100px;"/>
+            </div>
+            <div class="col-sm-9 color-blue-bg">
+                <h4 class="font-bold text-color-white padding-10" style="padding-top:20px;">Edit Category</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 admin-side-bar-anchors light-grey-color-bg">
+                <a href="/admin">Add Category</a>
+                <a href="/add-subcategory">Add Sub-Category</a>
+                <a href="/process-payment">Pending Payment</a>
+                <a href="/completed-payment">Completed Payment</a>
+                <a href="/post-administration">Post Administration</a>
+                <a href="/edit-category" class="color-blue-bg text-color-white">Edit Category</a>
+                <a href="/edit-sub-category">Edit Sub-Category</a>
+                
+            </div>
+            <div class="col-sm-9" ng-controller="editCatergoryController">
+                <br/>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="red-color-text font-14"><b>Max image size: 5 mb</b></p>
+                    </div>
+                </div>
+                <%
+                    if(already)
+                    {
+                        %>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="red-color-text font-14 text-center"><b>Category already exists!</b></p>
+                            </div>
+                        </div>
+                                
+                        <%
+                    }
+                
+                %>
+                <div class="row padding-10" ng-repeat="x in categories">
+                    <div class="col-sm-12 category-box padding-10">
+                        <div class="row padding-10">
+                            <div class="col-sm-12">
+                            <form method="POST" action="{{'editCategory/'+x._id}}" enctype="multipart/form-data">
+                                <br/> 
+				<input type="hidden" name="authenticate" value="110ec58a-b123-4ac4-7171-c87q4we3b8d1" />                           
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p><b>Category</b></p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="name" value="{{x.name}}" placeholder="Category Name" required/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p><b>Category Description</b></p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="description" value="{{x.description}}" placeholder="Category Description" required/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <p><b>Category Image (Website)</b></p>
+                                        <p class="red-color-text font-14"><b>335 (Width)x366 (Height)</b></p>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input type="file" class="form-control category-image" name="image" accept="image/*" required/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                        <div class="col-sm-4">
+                                            <p><b>Category Banner (Website)</b></p>
+                                            <p class="red-color-text font-14"><b>390 (Height)</b></p>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <input type="file" class="form-control image" name="banner" accept="image/*" required/>
+                                        </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <p><b>Category Icon (Mobile)</b></p>
+                                        <p class="red-color-text font-14"><b>128 (Width)x128 (Height)</b></p>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input type="file" class="form-control icon" name="icon" accept="image/*" required/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <p><b>Should be displayed on wall?</b></p>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <input id="yes-{{x._id}}" class="cursor-pointer" type="radio" name="onWall" value="true" ng-checked="x.onWall" required/>
+                                                &nbsp;
+                                                <label for="yes-{{x._id}}" class="font-bold cursor-pointer">Yes</label>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="no-{{x._id}}" class="cursor-pointer" type="radio" name="onWall" value="false" ng-checked="!x.onWall" required/>
+                                                &nbsp;
+                                                <label for="no-{{x._id}}" class="font-bold cursor-pointer">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-4"> 
+                                        <button type="submit" class="btn-design padding-10 color-blue-bg text-color-white" style="width:100px;">Save</button>
+                                    </div>
+                                    <div class="col-sm-4">
+                                            <button type="button" class="btn-design padding-10 color-blue-bg text-color-white" style="width:100px;" ng-click="deleteCategory(x._id)">Delete</button>
+                                    </div>
+                                </div>
+                                </form>
+
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

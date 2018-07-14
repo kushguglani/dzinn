@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-click="hideStuff($event)">
+  <head>
+    <title>Admin Portal</title>
+    <% include ../partials/include %>
+    <link rel="stylesheet" href="css/admin.css"/>
+    <script src="/js/admin.js"></script>
+    </head>
+  <body>
+    <div class="container padding-20">
+        <div class="row">
+            <div class="col-sm-3 background-color-white padding-10">
+                <img src="/icons/logo.png" style="width:100px;"/>
+            </div>
+            <div class="col-sm-9 color-blue-bg">
+                <h4 class="font-bold text-color-white padding-10" style="padding-top:20px;">Post Administration</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 admin-side-bar-anchors light-grey-color-bg">
+                <a href="/admin">Add Category</a>
+                <a href="/add-subcategory">Add Sub-Category</a>
+                <a href="/process-payment">Pending Payment</a>
+                <a href="/completed-payment">Completed Payment</a>
+                <a href="/post-administration" class="color-blue-bg text-color-white">Post Administration</a>
+                <a href="/edit-category">Edit Category</a>
+                <a href="/edit-sub-category">Edit Sub-Category</a>
+           
+            </div>
+            <div class="col-sm-9 padding-10" ng-controller="post-administration-controller">
+                    <div class="row padding-10">
+                            <div class="col-sm-12">
+                              <input type="text" class="form-control" placeholder="Search for a task title"  ng-model="search"/>
+                            </div>
+                          </div>
+                <div class="row padding-10 margin-5" ng-repeat="x in tasks| filter:{title:search}">
+                    <div class="col-sm-12 padding-10 background-color-white">
+                        <h4><b>{{x.title}}</b></h4>
+                        <p>{{x.Description}}</p>
+                        <p><b>Posted By:</b> {{getUserDetails(x.postedBy)}}</p>
+                        <div class="clearfix">
+                            <p class="float-left"><b>Cost:</b> {{x.Cost=='N/A'?'Open for Bidding':'&euro;'+' '+x.Cost}}</p>
+                            <p class="float-right"><b>Due Date:</b> {{x.dueDate}}</p>
+                        </div>
+                        <button class="btn-design padding-10 color-blue-bg text-color-white" ng-click="deleteTask(x._id)">Delete</button>
+                    </div>
+                </div>
+                <div class="row padding-10" ng-show="tasks.length==0">
+                    <div class="col-sm-12">
+                        <br/>
+                        <br/>
+                        <h4 class="text-center font-bold color-blue">No tasks found!</h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

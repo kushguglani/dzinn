@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="mainController" ng-click="hideStuff($event)">
+  <head>
+    <title>Post a Task</title>
+    <% include ../partials/include %>
+    <script src="js/postatask.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaPcCIb_JIRvrEEPCRJ6Sra55YY9gW1Pk&libraries=places" async defer></script>
+  </head>
+  <body ng-click="categoriesOverlayRemover()">
+    <% include ../partials/topbar %>
+    <br>
+    <br><br><br>
+    <div class="container" ng-controller="postATaskController">
+      <div class="row">
+        <div class="col-sm-6 padding-10 text-center">
+          <button class="btn-design" style="width:80%;margin:auto;" ng-class="{'background-color-blue color-white':(taskType=='online')}" ng-click="taskType='online'">Online Task</button>
+        </div>
+        <div class="col-sm-6 padding-10 text-center">
+          <button class="btn-design" style="width:80%;margin:auto;" ng-class="{'background-color-blue color-white':(taskType!='online')}" ng-click="setTaskOffLine()">Offline Task</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 padding-10">
+          <p><b>Title <span style="color:#f44336;">*</span></b></p>
+          <input type="text" class="form-control" ng-model="title" placeholder="Enter title here"/>
+        </div>
+        <div class="col-sm-12 padding-10">
+          <p><b>Description <span style="color:#f44336;">*</span></b></p>
+          <textarea class="form-control" ng-model="description" placeholder="Enter description here" rows="5"></textarea>
+        </div>
+        <div class="col-sm-4 padding-10">
+          <p><b>Cost (&euro;)</b></p>
+          <input type="number" class="form-control" ng-model="cost" placeholder="Cost (Optional)" style="width:80%;display:inline-block;margin-right:5px;"/>
+          <i class="fa fa-info-circle color-blue" data-toggle="tooltip" title="Cost: Your Budget. Please enter the estimated price you are willing to pay." data-placement="bottom" style="font-size:32px;" aria-hidden="true"></i>
+        </div>
+        <div class="col-sm-4 padding-10">
+          <p><b>Due Date <span style="color:#f44336;">*</span></b></p>
+          <input type="date" class="form-control" ng-model="date" style="width:80%;display:inline-block;margin-right:5px;"/>
+          <i class="fa fa-info-circle color-blue" style="font-size:32px;" data-toggle="tooltip" data-placement="bottom" title="Due Date: To Be Completed By. Please enter the latest date you wish to get the task done by." aria-hidden="true"></i>
+        </div>
+        <div class="col-sm-4 padding-10" style="position:relative;">
+          <p><b>Tag</b></p>
+          <input type="text" class="form-control" placeholder="Search for tags (#Tag)" ng-model="tags" ng-keyup="tagMagic($event)"  style="width:80%;display:inline-block;margin-right:5px;"/>
+          <i class="fa fa-info-circle color-blue" style="font-size:32px;" data-toggle="tooltip" data-placement="bottom" title="Tag your task with keywords to allow service providers to easily search for it." aria-hidden="true"></i>
+          <div class="tag-overlay" ng-style="tagOverlayStyle">
+            <p ng-repeat="x in dbTags" ng-click="addSelectedTag(x.tagName)">{{x.tagName}}</p>
+          </div>
+          <div class="tags clearfix">
+            <span class="selectedTag" ng-repeat="x in selectedTags"><span>{{x}}</span>&nbsp;&nbsp;<span class="cursor-pointer" ng-click="removeSelectedTag(x)">X</span></span>
+          </div>
+        </div>
+        <div class="col-sm-4 padding-10" ng-show="taskType!='online'">
+          <p><b>Task Address <span style="color:#f44336;">*</span></b></p>
+          <input type="text" class="form-control" placeholder="Search for a place" ng-model="place" id="placeSearch"/>
+        </div>
+        <p style="padding:5px;"><b>Bid Type <span style="color:#f44336;">*</span></b></p>
+        <div class="col-sm-2 padding-5">
+          <input type="radio" class="form-control" ng-model="bidType" value="open" style="display:inline-block;width:30%;" id="openBid"/>&nbsp;
+          <label for="openBid" class="cursor-pointer font-bold">Open Bid</label>
+        </div>
+        <div class="col-sm-2 padding-5">
+          <input type="radio" class="form-control" ng-model="bidType" value="closed" style="display:inline-block;width:30%;" id="closeBid"/>&nbsp;
+          <label for="closeBid" class="cursor-pointer font-bold">Close Bid</label>
+        </div>
+        <div class="col-sm-2 padding-5">
+          <i class="fa fa-info-circle color-blue" style="font-size:32px; display: block;" data-toggle="tooltip" data-placement="bottom" title="Bid Type: 
+          I: Open Bid: Allow the service providers to see the rest of the bids in your task. 
+          II: Close Bid: Hide the bids on your task from other service providers." aria-hidden="true"></i>
+        </div>
+
+
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-sm-4 padding-10">
+          <p><b>Category <span style="color:#f44336;">*</span></b></p>
+          <select class="form-control" ng-model="category" ng-change="changeSubCategory()" ng-options="x.name for x in categories"></select>
+        </div>
+        <div class="col-sm-4 padding-10">
+          <p><b>Subcategory <span style="color:#f44336;">*</span></b></p>
+          <select class="form-control" ng-model="subcategory" ng-options="x.name for x in category.subcategories"></select>
+        </div>
+        <div class="col-sm-4 padding-10 text-center">
+          <p></p>
+          <br>
+          <button class="btn-design background-color-blue color-white" ng-if="!adding" style="width:200px;" ng-click="addATask()">Dzinn it!</button>
+          <button class="btn-design background-color-blue color-white" ng-if="adding" style="width:200px;" ng-click="addATask()"><i class="fa fa-cog fa-spin"></i></button>
+
+        </div>
+
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <script>
+      var postedBy='<%=data._id%>';
+    </script>
+    <% include ../partials/footer %>
+    <% include ../partials/signUp %>
+    <% include ../partials/bottomBar %>
+
+  </body>
+</html>

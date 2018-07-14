@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="mainController" ng-click="hideStuff($event)">
+  <head>
+    <title>Welcome <%=data.name%></title>
+    <% include ../partials/include %>
+    <link rel="stylesheet" href="/css/dashboard.css"/>
+    <script src="/js/connectwithadmin.js"></script>
+  </head>
+  <body ng-click="categoriesOverlayRemover()">
+    <% include ../partials/topbar %>
+    <br/>
+    <br/><br/><br/><br/>
+    <div class="container border-radius-10 background-color-white">
+        <div class="row">
+            <div class="col-sm-2 light-grey-color-bg padding-10 dashboard-side-bar">
+                <a href="/profile/<%=data._id%>" target="_blank"><img ng-src="/userImages/<%=data._id%>.png?v={{currentTime}}" class="img-rounded" style="height:100px;width:100px;margin:auto;display:block;"/></a>
+                <p class="font-bold text-center"><%=data.name%></p>
+                <%
+                if(!data.emailVerified)
+                {
+                    %>
+                    <p class="font-bold red-color-text text-center font-12">Email not verified</p>
+                    <%
+                }
+                else
+                {
+                    %>
+                    <p class="font-bold color-blue text-center font-12">Email verified</p>
+                    <%
+                }
+            %>
+                <a href="/">Dashboard</a>
+                <a href="/inbox">Your Tasks</a>
+                <a href="/yourbids">Your Bids</a>
+                <a href="/jobhistory">Job History</a>
+                <a href="/connectwithadmin" class="color-blue-bg">Connect with Admin</a>
+                <a href="#" ng-click="showEarnModal()">Bank Account Details</a>
+            </div>
+            <div class="col-sm-10 padding-10" ng-controller="connectwithadmin">
+                    <br/>
+                    <p class="font-bold" ng-show="tasks.length>0">Click on a task to know more</p>
+                    <div ng-repeat="task in tasks" class="row margin-bottom-20 margin-5 border-grey-half border-radius-5">
+                        <div class="col-sm-12" style="padding:0px;margin:0px;">
+                                <p ng-click="showDescriptor($index)" class="padding-10 border-radius-5 no-select cursor-pointer light-grey-color-bg font-bold" style="margin:0px;">
+                                    {{task.title}}
+                                </p>
+                                <div class="task-descriptor padding-20" ng-show="task.show">
+                                    <div class="font-bold clearfix">
+                                        <p class="float-left">Description:</p>
+                                        <p class="float-right">Cost (&euro;): {{task.Cost=='N/A'?'Open for biding':task.Cost}}</p>
+                                    </div>
+                                            <p>{{task.Description}}</p>
+                                    <div class="job-process-box margin-5 padding-20" ng-show="checkVar(task.assignedTo)&&!checkVar(task.complete)">
+                                        <div class="row">
+                                            <div  class="text-center" style="display:block;width:100%;margin:auto;position:relative;z-index:0;top:25px;">
+                                            <div class="padding-2 color-blue-bg" style="display:inline-block;width:33.5%;"></div><div class="padding-2 background-color-grey" style="display:inline-block;width:33.5%;"></div></div>
+                                            <div class="text-center" style="width:33%;position:relative;z-index:1;">
+                                                    <i class="font-28 color-blue fa fa-circle" aria-hidden="true"></i>
+                                                    <br/>                                                
+                                                    <p class="color-grey">Client</p>
+                                                    <p class="color-grey">{{task.postDate}}</p>                                                
+                                                </div>
+                                            <div class="text-center" style="width:33%;position:relative;z-index:1;">
+                                                    <i class="font-28 color-blue fa fa-circle" aria-hidden="true"></i>
+                                                    <br/>
+                                                    <p class="color-grey">Dzinn</p>
+                                                    <p class="color-grey">{{task.assignedDate}}</p>                                                
+                                            </div>
+                                            <div class="text-center" style="width:33%;position:relative;z-index:1;">
+                                                    <i class="font-28 color-grey fa fa-circle" aria-hidden="true"></i>
+                                                    <br/>                                                
+                                                    <p class="color-grey">Customer</p>
+                                                </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row" >
+                                            <div class="col-sm-12 text-center" ng-show="checkVar(task.reported)">
+                                                <p class="font-bold">Task reported to admin!</p>
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                    <div class="feedback-box margin-5 padding-20" ng-show="checkVar(task.assignedTo)&&checkVar(task.complete)">
+                                            <div class="row">
+                                                    <div  class="text-center" style="display:block;width:100%;margin:auto;position:relative;z-index:0;top:25px;">
+                                                    <div class="padding-2 color-blue-bg" style="display:inline-block;width:67%;"></div></div>
+                                                    <div class="text-center" style="width:33%;position:relative;z-index:1;">
+                                                            <i class="font-28 color-blue fa fa-circle" aria-hidden="true"></i>
+                                                            <br/>                                                
+                                                            <p class="color-grey">Client</p>
+                                                            <p class="color-grey">{{task.postDate}}</p>                                                
+                                                        </div>
+                                                    <div class="text-center" style="width:33%;position:relative;z-index:1;">
+                                                            <i class="font-28 color-blue fa fa-circle" aria-hidden="true"></i>
+                                                            <br/>
+                                                            <p class="color-grey">Dzinn</p>
+                                                            <p class="color-grey">{{task.assignedDate}}</p>                                                
+                                                    </div>
+                                                    <div class="text-center" style="width:33%;position:relative;z-index:1;">
+                                                            <i class="font-28 color-blue fa fa-circle" aria-hidden="true"></i>
+                                                            <br/>                                                
+                                                            <p class="color-grey">You</p>
+                                                            <p class="color-grey">{{task.completionDate}}</p>                                                
+                                                            
+                                                        </div>
+                                                </div>
+                                                <br/>
+                                                <div class="row" ng-show="checkVar(task.feedbackPosted)">
+                                                    <div class="col-sm-12">
+                                                            <p class="font-bold">Feedback</p>
+                                                            <p class="font-bold font-14">Title</p>
+                                                            <p >{{task.feedbackTitle}}</p>
+                                                            <br/>
+                                                            <p class="font-bold font-14">Rating</p>
+                                                            <p class="font-bold font-18" >
+                                                                <i ng-class="{fa:true, 'fa-star':task.feedbackRating>=1,'fa-star-o':task.feedbackRating<1, 'cursor-pointer':true, 'margin-5':true}"  aria-hidden="true" title="Rate 1"></i>
+                                                                <i ng-class="{fa:true, 'fa-star':task.feedbackRating>=2, 'fa-star-o':task.feedbackRating<2,'cursor-pointer':true, 'margin-5':true}"     aria-hidden="true" title="Rate 2"></i>
+                                                                <i ng-class="{fa:true, 'fa-star':task.feedbackRating>=3, 'fa-star-o':task.feedbackRating<3,'cursor-pointer':true, 'margin-5':true}"  aria-hidden="true" title="Rate 3"></i>
+                                                                <i ng-class="{fa:true, 'fa-star':task.feedbackRating>=4, 'fa-star-o':task.feedbackRating<4,'cursor-pointer':true, 'margin-5':true}"  aria-hidden="true" title="Rate 4"></i>
+                                                                <i ng-class="{fa:true, 'fa-star':task.feedbackRating==5, 'fa-star-o':task.feedbackRating<5,'cursor-pointer':true, 'margin-5':true}"  aria-hidden="true" title="Rate 5"></i>
+                                                            </p>
+                                                            <br/>
+                                                            <p class="font-bold font-14">Comment</p>
+                                                            <p >{{task.feedbackComment}}</p>
+                                                    </div>
+                                                </div>
+                                              
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <p class="font-bold">
+                                                Message
+                                            </p>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control" rows="3" placeholder="Message to Admin" ng-model="task.messageToAdmin"></textarea>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button style="width:100px;" class="btn-design color-blue-bg padding-10 text-color-white" ng-click="sendMessageToAdmin($index)">Send</button>
+                                        </div>
+                                    </div>  
+                                </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <h4 class="color-blue font-bold text-center" ng-show="tasks.length==0">Nothing to show!</h4>
+            </div>
+        </div>
+    </div>
+    <% include ../partials/footer %>
+    <% include ../partials/signUp %>
+    <% include ../partials/bottomBar %>
+
+  </body>
+</html>

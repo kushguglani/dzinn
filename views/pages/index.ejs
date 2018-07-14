@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="mainController" ng-click="hideStuff($event)">
+  <head>
+    <title>Welcome to DZINN</title>
+    <% include ../partials/include %>
+  </head>
+  <body ng-click="categoriesOverlayRemover()">
+    <% include ../partials/topbar %>
+    <div class="main-show-board" ng-controller="slider-controller">
+      <img src="images/1.jpg" ng-style="left"/><img src="images/2.jpg" ng-style="left"/><img src="images/3.jpg" ng-style="left"/>
+      <div class="main-show-board-text">
+
+      <h1 class="color-white"><b>Get your Service</b></h1><br>
+      <p class="color-white"><b>This website is under development</b></p>
+    </div>
+    <div class="slider-dots">
+      <i class="fa cursor-pointer" ng-class="(left.left=='0%')?'color-blue fa-circle':'color-grey fa-circle-o'" aria-hidden="true" ng-click="specific(0)"></i>
+      &nbsp;&nbsp;
+      <i class="fa cursor-pointer" ng-class="(left.left=='-100%')?'color-blue fa-circle':'color-grey fa-circle-o'" aria-hidden="true" ng-click="specific(-100)"></i>
+      &nbsp;&nbsp;
+      <i class="fa cursor-pointer" ng-class="(left.left=='-200%')?'color-blue fa-circle':'color-grey fa-circle-o'" aria-hidden="true" ng-click="specific(-200)"></i>
+    </div>
+    </div>
+    <br>
+    <div class="show-board">
+    <h1 class="text-center color-blue">What do you need to get done?</h1>
+    <br>
+    <div class="container" ng-controller="showboardcontroller">
+      <div class="row">
+        <div class="col-sm-3 show-board-box" ng-repeat="x in categories">
+          <div style="position:relative;">
+            <img ng-src="images/categories/{{x}}.png" ng-click="changePage(x)"/>
+            <p class="font-bold text-center color-blue background-color-white">{{x}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="originalCategories.length>categories.length" style="padding:10px;">
+        <button class="btn-design display-block margin-auto border-grey-half color-grey" ng-click="equate()" style="background:none;font-size:12px;">See More Categories</button>
+      </div>
+      <br>
+    </div>
+    </div>
+    <br>
+    <% include ../partials/footer %>
+    <% include ../partials/signUp %>
+    <% include ../partials/bottomBar %>
+
+  </body>
+</html>

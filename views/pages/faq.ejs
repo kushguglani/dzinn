@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="mainController" ng-click="hideStuff($event)">
+  <head>
+    <title>Welcome to DZINN</title>
+    <% include ../partials/include %>
+  </head>
+  <body ng-click="categoriesOverlayRemover()">
+    <% include ../partials/topbar %>
+    <div class="main-container">
+        <div class="sub-container">
+          <div class="sub-container-small">
+            <a href="/about"><div class="sub-container-small__sections">About</div></a>
+            <a href="/help"><div class="sub-container-small__sections ">Help</div></a>
+            <a href="/privacy"><div class="sub-container-small__sections">Privacy</div></a>
+            <a href="faq"><div class="sub-container-small__sections sub-container-small__sections_selected">FAQs</div></a>
+          </div>
+          <div class="sub-container-large">
+                <h3 style="color: #1c8de9">FAQs</h3>
+What is DZINN?
+<br>
+We are an online marketplace that connects customers directly to expert service providers.
+<br><br>
+
+What services do you provide?
+<br>
+
+We provide a host of personal and business services. Please browse our categories to know more.
+<br><br>
+
+How do I sign up
+<br>
+
+Signing up and creating an account on DZINN is free. Go to www.dzinnapp.com and select the sign up button. You can sign up using your email or Facebook account.
+<br>
+After you sign up, be sure to complete your profile under your account. You'll be able to add details such as skills, verifications, portfolio attachments and manage your alerts.
+<br><br>
+How do I get in touch with the professional?
+<br>
+Once you’ve made a choice, you will be able to contact a service provides through our site/app, or even directly.
+<br><br>
+How do I get in touch with DZINN?
+<br>
+You can get in touch via our website. Please leave your details and we will get back at a time most convenient for you.
+<br><br>
+How do I post a task?
+<br>
+It's completely free to post a task on DZINN and get quotes for your task. Simply select Post Task and complete the form. Be sure to be clear in your scope, time and budget, as this helps Taskers know whether they have the skills and abilities to complete your task. 
+<br>
+<ul>
+<li>         Scope: The task description should clearly, and thoroughly, state what it is that you need done. Adding as much information as possible helps the Taskers understand expectations.</li>
+<li>         Time: Does the task need to be completed on a specific day or can it be flexible with the Tasker? If specific, mention in task description.</li>
+<li>         Budget: Setting a fair price for the amount of time and effort required for the task is crucial. DZINN does not endorse low pricing of tasks and a task may be moderated, if found to be.</li>
+</ul>
+You'll receive offers from trusted Taskers for you to review who's best to complete the task.
+<br>
+
+When you accept an offer, you'll be able to communicate with the Taskers via DZINN private messaging and call them to arrange further details. 
+<br>
+You can also request quotes from specific Taskers by selecting 'Request a Quote' on their public profile pages. 
+<br><br>
+How do I file a dispute?
+<br>
+For any disputes, please contact us and we will try to resolve your issues.
+<br><br>
+How do reviews work?
+<br>
+Reviews help people trust in our community by creating an easy, honest and reliable way for members to know what to expect from others. Whether you’ve posted a task or you’ve completed one, telling us how it went honestly and fairly gives a great guide for the community.
+<br>
+           </div>
+        </div>
+      </div>
+      <% include ../partials/footer %>
+      <% include ../partials/signUp %>
+      <% include ../partials/bottomBar %>
+  </body>
+  </html>

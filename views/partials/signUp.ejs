@@ -1,0 +1,93 @@
+<div class="cover" ng-if="signUpBoxVariable" ng-class="{'display-block':signUpBoxVariable}" ng-click="hideSignUpBox()">
+  <div class="sign-up-box clearfix" ng-style="styleObject" ng-click="stopProp($event)">
+    <div class="float-left sign-up-background" style="height:100%;width:35%;">
+      <img src="/images/signupbackground.png" style="height:100%;width:100%;display:block;"/>
+    </div>
+    <div class="sign-up-side" ng-controller="signUpInController">
+      <div ng-if="mainBox">
+        <span class="float-right color-grey cursor-pointer font-28" ng-click="hideSignUpBox()">&times;</span><br style="clear:both;">
+      <h4 class="color-blue"><span class="cursor-pointer" ng-class="{'font-bold':signIn}" ng-click="signInFormShow()">Sign In</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="cursor-pointer" ng-class="{'font-bold':!signIn}" ng-click="signUpFormShow()">Sign Up</span></h4>
+      <br>
+      <div class="sign-in-box-fields" ng-if="signIn" ng-controller="signInController">
+        <div>
+          <input type="text" ng-keyup="checkEmail()" placeholder="Email" ng-model="email.value"/>
+          <img class="check-mark"  ng-if="email.valid" src="/icons/check.png"/>
+          <img class="check-mark"  ng-if="email.value.trim()!=''&&!email.valid" src="/icons/wrong.png" title="Enter a valid Email"/>
+        </div>
+        <div>
+        <input type="password" ng-keyup="checkPassword()" placeholder="Password" ng-model="password.value"/>
+        </div>
+        <span class="float-right cursor-pointer font-12 color-grey font-bold" ng-click="forgetPassword()">Forgot Password?</span>
+        <br style="clear:both;">
+        <button class="sign-up-button" ng-if="!loggingIn" ng-click="signIn()">Log In</button>
+        <button class="sign-up-button" ng-if="loggingIn"><i class="fa fa-spin fa-cog"></i></button>
+        &nbsp;<span class="color-grey">Or login with</span>&nbsp;&nbsp;<img  src="/icons/google-sign-in.png" onclick="googleSignIn()" class="cursor-pointer" style="width:30px;"/>
+        <br/>
+        <br/>
+        <p class="font-bold font-12">By signing up you accept our privacy policy, terms and conditions <a href="#" >read more</a></p>
+      </div>
+      <div  ng-if="!signIn" ng-controller="signUpController">
+        <div class="sign-up-box-fields" ng-show="!otp">
+        <div>
+          <input type="text" ng-keyup="checkEmail()" ng-model="email.value" placeholder="Email"/>
+          <img class="check-mark"  ng-class="{'visibility-hidden':!email.valid}" ng-if="email.valid" src="/icons/check.png"/>
+          <img class="check-mark"  title="Enter a valid Email" ng-class="{'visibility-hidden':email.valid}" ng-if="email.value.trim()!=''&&!email.valid" src="/icons/wrong.png"/>
+        </div>
+        <div>
+          <input type="text" ng-keyup="checkName()"  placeholder="Name" ng-model="name.value"/>
+          <img class="check-mark" ng-class="{'visibility-hidden':!name.valid}" ng-if="name.valid" src="/icons/check.png"/>
+          <img class="check-mark"  title="Enter a valid name" ng-class="{'visibility-hidden':name.valid}" ng-if="name.value.trim()!=''&&!name.valid" src="/icons/wrong.png"/>
+        </div>
+        <div>
+          <select style="display:inline-block;width:25%;padding-bottom:6.5px;" ng-model="dialCode" ng-change="checkPhone()">
+            <option ng-repeat="x in dialCodes" value="{{x.dial_code}}">({{x.dial_code}}) {{x.name}}</option>
+          </select>
+          <input type="number" ng-keyup="checkPhone()" ng-model="phoneNumber.value" placeholder="Contact Number" style="display:inline-block;width:65%;"/>
+          <img ng-class="{'visibility-hidden':!phoneNumber.valid}" class="check-mark" ng-if="phoneNumber.valid" src="/icons/check.png"/>
+          <img class="check-mark" title="Enter a valid phone number" ng-class="{'visibility-hidden':phoneNumber.valid}" ng-if="phoneNumber.value&&!phoneNumber.valid" src="/icons/wrong.png"/>
+        </div>
+        <div>
+          <input type="password" ng-keyup="checkPassword()" ng-model="password.value" placeholder="Password (Min 5 Characters)"/>
+        </div>
+        <div>
+          <input type="password" ng-keyup="checkPassword()" ng-model="rpassword.value" placeholder="Retype Password (Min 5 Characters)"/>
+        </div>
+        <button class="sign-up-button" ng-if="!signingIn" ng-click="signIn()">Sign Up</button>
+        <button class="sign-up-button" ng-if="signingIn"><i class="fa fa-cog fa-spin"></i></button>
+
+        &nbsp;<span class="color-grey">Or login with</span>&nbsp;&nbsp;<img  src="/icons/google-sign-in.png" onclick="googleSignIn()" class="cursor-pointer" style="width:30px;"/>
+        <br/>
+        <br/>
+        <p class="font-bold font-12">By signing up you accept our privacy policy, terms and conditions <a href="#" >read more</a></p>
+      </div>
+        <div ng-show="otp" class="sign-up-box-fields">
+            <h4 class="font-bold color-blue">
+                <i class="fa fa-arrow-left cursor-pointer" ng-click="signingIn=otp=false" aria-hidden="true"></i>
+                  &nbsp;&nbsp;
+                  Enter OTP</h4>
+            <br>
+            <input type="number" ng-model="otpValue" placeholder="Enter OTP"/>
+            <br/>
+            <button class="sign-up-button" style="width:200px;" ng-click="register()">Verify</button>
+            <br/>
+            <br/>
+            <button class="sign-up-button" style="width:200px;" ng-click="resendOTP()">Resend OTP</button>
+        </div>
+      </div>
+      </div>
+      <div ng-if="!mainBox" class="padding-10 sign-in-box-fields">
+        <h4 class="font-bold color-blue">
+            <i class="fa fa-arrow-left cursor-pointer" ng-click="closeForgotPassword()" aria-hidden="true"></i>
+              &nbsp;&nbsp;
+              Forgot Password</h4>
+        <br>
+        <div>
+        <input type="text" placeholder="Email Address" ng-model="forgotPassword.value" ng-keyup="checkForgotPassword()"/>
+        <img ng-class="{'visibility-hidden':!forgotPassword.valid}" class="check-mark" src="/icons/check.png"/>
+        <img class="check-mark" title="Enter a valid email" ng-class="{'visibility-hidden':forgotPassword.valid}" ng-if="forgotPassword.value.trim()&&!forgotPassword.valid" title="Enter a valid Email" src="/icons/wrong.png"/>
+        </div>
+        <button class="sign-up-button" style="width:200px;" ng-click="forgotPassword()">Reset my password</button>
+      </div>
+    </div>
+  </div>
+</div>

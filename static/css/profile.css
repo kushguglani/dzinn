@@ -1,0 +1,31 @@
+.search-overlay-skills
+{
+    position: absolute;
+    top:38px;
+    left:0px;
+    background-color: white;
+    max-height: 300px;
+    overflow-y: scroll;
+    width:100%;    
+}
+.search-overlay-skills p
+{
+    padding:10px;
+    cursor: pointer;
+}
+.search-overlay-skills p:hover
+{
+    background-color: #0d92e5;
+    color:white;
+}
+.edit-block
+{
+    top:-110px;
+}
+@media all and (max-width:768px)
+{
+    .edit-block
+    {
+        top:-320px;
+    }
+}

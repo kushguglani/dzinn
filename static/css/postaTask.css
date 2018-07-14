@@ -1,0 +1,36 @@
+.tag-overlay
+{
+    position: absolute;
+    background-color: white;
+    z-index:9;
+    width:95%;
+    border:0.5px solid #757575;
+    border-radius: 5px;
+}
+.tag-overlay p
+{
+    padding:8px;
+    padding-left: 20px;
+    color:#757575;
+}
+.tag-overlay p:hover
+{
+    cursor: pointer;
+    background-color: #757575;
+    color:white;
+}
+.tags
+{
+    padding:5px;
+}
+.selectedTag
+{
+    float:left;
+    margin: 10px;
+    border-radius:5px;
+    padding:10px;
+    color:white;
+    font-weight: bold;
+    background-color:#0d92e5;
+    
+}

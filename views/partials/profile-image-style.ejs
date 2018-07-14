@@ -1,0 +1,23 @@
+<style>
+        .profile-image
+        {
+            <%
+                if(profileData.profileBackground)
+                {
+                    %>
+                    background:url('../userImages/<%=profileData._id%>.png');
+                    <%
+                }
+                else
+                {
+                    %>
+                    background:url('../userImages/profile-background.png');
+                    <%
+                    
+                }
+            %>
+            background-size:cover;
+            height: 250px;
+        }
+</style>
+  

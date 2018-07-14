@@ -1,0 +1,50 @@
+<div class="modal fade" id="phoneNumberModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-bold">Complete Registration</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class='container' style="padding:20px;">
+             <div class="row padding-10 sign-up-box-fields">
+                <select id="complete-code" style="display:inline-block;width:20%;padding-bottom:6.5px;">
+                </select>
+                <input type="number" placeholder="Contact Number" id="complete-contact" style="display:inline-block;width:75%;"/>
+                <br/>
+                
+                <div id="otp-box" class="col-sm-12"></div>
+                <br/>
+                <div class="col-sm-12">
+                    <p class="text-center red-color-text" id="phoneNumberModalAlert"></p>
+                </div>
+                <br/>
+               
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary background-color-blue" onclick="completeGoogle(this)">Complete Registration</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div id="google-sign-button" class="g-signin2" data-onsuccess="onSignIn"></div>
+<br>
+<div class="footer" ng-controller="footerController">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+      <div class="footer-links" ng-repeat="x in links">
+        <a href="{{x.url}}" class="color-grey">{{x.link}}</a>
+      </div>
+      </div>
+    </div>
+    <br>
+    <p class="font-12 color-grey text-center"><b>&copy; 2017 DZINN. All right reserved.</b></p>
+  </div>
+</div>

@@ -1,0 +1,236 @@
+<div class="top-bar clearfix" ng-controller="topBarController">
+  <div class="top-bar-image" style="float:left;">
+    <a href="/"><img src="/icons/logo.png"/></a>
+  </div>
+  <div class="search-box" style="float:left;position:relative;">
+    <span style="position:relative;left:5px;" ng-click="categoriesOverlaySetter($event);showcategoriesOverlay()" class="clearfix">{{display(searchCategory)}} &nbsp;&nbsp;<i class="fa fa-caret-down"></i>
+    <div class="categories-overlay" ng-style="categoriesOverlay" ng-show="categoriesOverlayVar" style="position:absolute;min-width:200px;left:-10px;top:43px;overflow:auto;max-height:300px;background-color:white;box-shadow: 0px 2px 0px #ccc;">
+      <div style="padding:10px;" ng-repeat="x in categories" ng-click="hidecategoriesOverlay(x,$event)">{{x}}</div>
+    </div>
+    </span>
+    <input type="search" placeholder="Search" ng-model="searchTerm" ng-keyup="search($event)" maxlength="80"/>
+    <i class="fa fa-search color-grey main-search-icon" aria-hidden="true"></i>
+    <div class="search-overlay" ng-style="searchOverlayStyle">
+      <p ng-repeat="x in tasks" class="color-blue font-16 font-bold" ng-click="redirect(x._id)">
+        {{x.title}}
+      </p>
+    </div>
+  </div>
+  <div class="main-links text-center" style="float:right;margin-top:10px;">
+    <a href="/video">Video</a>
+    <%
+    if(typeof data=='undefined')
+    {
+      %>
+      <a href="#" ng-click="showSignUpBox();showBottomBar('Please, Log In first!');">Post a Task</a>
+      <a href="/earn" <%
+        if(typeof highLightEarn!='undefined'&&highLightEarn==true)
+        {
+          %>
+          class="color-blue font-bold"
+          <%
+
+        }
+      
+      %>>Earn</a>
+      <a href="#" ng-click="showSignUpBox();" id="log-in-button-top-bar">Log In</a>
+      <%
+
+    }
+    else
+    {
+      %>
+      <a href="/postatask" <%
+      if(highLightPostATask)
+      {
+        %>
+        class="color-blue font-bold"
+        <%
+
+      }
+
+
+      %>>Post a Task</a>
+      <%
+        if(data.iban)
+        {
+          if(locals.highLightEarn)
+          {
+          %>
+          <a href="/earn" class="color-blue font-bold">Earn</a>
+          <%
+          }
+          else
+          {
+            %>
+            <a href="/earn">Earn</a>
+            <%
+          }
+        }
+        else
+        {
+          %>
+          <a href="#" ng-click="showEarnModal()">Earn</a>
+          <%
+        }
+      
+      %>
+      <a href="#" style="position:relative;" ng-click="showNotificationOverlay($event)"><img style="display:inline-block;width:25px;" src="/icons/notification.png"/><span style="font-size:11px;position:relative;right:10px;bottom:10px;display:inline-block;width:20px;height:20px;border-radius:50%;padding:2px;color:white;" class="background-color-blue">{{notificationCount}}</span>
+        <div class="notification-overlay" ng-style="notificationOverlay">
+          <div ng-class="{'clearfix notification-row notification-bg':!x.read,'clearfix notification-row':x.read}" ng-click="redirectTo(x.taskId)" ng-repeat="x in notifications">
+            <span class="float-left" style="width:15%">
+              <img ng-if="x.by!='Dzinn'" ng-src="/userImages/{{x.by}}.png?v={{currentTime}}" class="img-rounded" style="display:inline-block;width:40px;height:40px;"/>
+              <img ng-if="x.by=='Dzinn'" ng-src="/icons/logo.png?v={{currentTime}}" class="img-rounded" style="display:inline-block;width:40px;height:40px;"/>
+            </span>
+            <span class="float-right font-bold" style="width:85%">
+              <p class="font-14 clearfix"><b>{{x.title}}</b> <span class="font-10 float-right" style="vertical-align:bottom;">{{formatDate(x.date)}}</span></p>
+              <p class="font-12">{{x.message}}</p>
+            </span>
+          </div>
+          <div ng-if="!showAllNotifcations&&allNotifications.length>4">
+              <p  ng-click="showAllNotificationFunc()" class="text-center color-blue no-select font-bold cursor-pointer">Show more</p>
+          </div>
+        </div>
+      </a>
+      <a href="#" style="position:relative;" ng-click="showUserTopOverlay($event)"><img style="display:inline-block;width:25px;height:25px;" class="img-rounded" ng-src="/userImages/<%=data._id%>.png?v={{currentTime}}"/>&nbsp;<i class="fa fa-angle-down" aria-hidden="true"></i>
+        <div class="user-top-overlay font-bold" ng-style="userTopOverlay">
+          <span onclick="window.location.href='/profile/<%=data._id%>';">View Profile</span>
+          <span onclick="window.location.href='/logout';">Logout</span>
+        </div>
+      </a>
+
+      <%
+    }
+    %>
+  </div>
+  <span class="float-right menu-button" ng-click="showSideBar()">
+    <i class="fa fa-bars color-blue font-36"></i>
+  </span>
+  <div class="side-bar-cover" ng-style="sideBarCover" ng-click="hideSideBar()">
+      <div class="side-bar" ng-style="sideBarStyle" ng-click="sideBarClick($event)">
+          <br>
+          <a href="/"><img src="/icons/logo.png" style="display:block;width:100px;"/></a>
+          <%
+          if(typeof data=='undefined')
+          {
+            %>
+            <a href="#" ng-click="showSignUpBox();showBottomBar('Please, Log In first!');">Post a Task</a>
+            <a href="/earn">Earn</a>
+            <a href="#" ng-click="showSignUpBox();">Log In</a>
+            <%
+      
+          }
+          else
+          {
+            %>
+            <a href="/postatask" <%
+            if(highLightPostATask)
+            {
+              %>
+              class="color-blue font-bold"
+              <%
+      
+            }
+      
+      
+            %>>Post a Task</a>
+            <%
+              if(data.iban)
+              {
+                %>
+                <a href="/earn" >Earn</a>
+                
+                <%
+
+              }
+              else
+              {
+                %>
+                <a href="#" ng-click="showEarnModal()" >Earn</a>
+                <%
+              }
+            %>
+            <a href="#" style="position:relative;" ng-click="showNotificationOverlay($event)">Notifications <img style="display:inline-block;width:25px;" src="/icons/notification.png"/><span style="font-size:11px;position:relative;right:10px;bottom:10px;display:inline-block;width:20px;height:20px;border-radius:50%;text-align:center;padding:2px;color:white;" class="background-color-blue">{{notificationCount}}</span>
+              <div class="notification-overlay" ng-style="notificationOverlay">
+                  <div ng-class="{'clearfix notification-row notification-bg':!x.read,'clearfix notification-row':x.read}" ng-click="redirectTo(x.taskId)" ng-repeat="x in notifications">
+                    <span class="float-left" style="width:15%">
+                      <img ng-if="x.by!='Dzinn'" ng-src="/userImages/{{x.by}}.png?v={{currentTime}}" class="img-rounded" style="display:inline-block;width:40px;height:40px;"/>
+                      <img ng-if="x.by=='Dzinn'" ng-src="/icons/logo.png?v={{currentTime}}" class="img-rounded" style="display:inline-block;width:40px;height:40px;"/>
+                    </span>
+                    <span class="float-right font-bold" style="width:85%">
+                      <p class="font-14 clearfix"><b>{{x.title}}</b> <span class="font-10 float-right" style="vertical-align:bottom;">{{formatDate(x.date)}}</span></p>
+                      <p class="font-12">{{x.message}}</p>
+                    </span>
+                  </div>
+                  <div ng-if="!showAllNotifcations&&allNotifications.length>4">
+                      <p  ng-click="showAllNotificationFunc()" class="text-center color-blue no-select font-bold cursor-pointer">Show more</p>
+                  </div>
+                </div>
+            </a>
+            <a href="#" style="position:relative;" ng-click="showUserTopOverlay($event)">{{userName}}&nbsp;<img style="display:inline-block;width:25px;height:25px;" class="img-rounded" ng-src="/userImages/<%=data._id%>.png?v={{currentTime}}"/>&nbsp;<i class="fa fa-angle-down" aria-hidden="true"></i>
+              <div class="user-top-overlay font-bold" ng-style="userTopOverlay">
+                <span onclick="window.location.href='/profile/<%=data._id%>';">View Profile</span>
+                <span onclick="window.location.href='/logout';">Logout</span>
+              </div>
+            </a>
+      
+            <%
+          }
+          %> 
+        <a href="/video">Video</a>
+    
+      </div>
+    </div>
+  
+</div>
+<div class="modal fade" id="earnModal" ng-controller="accountController">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-bold">Complete your Account Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class='container' style="padding:20px;">
+            <div class="row padding-10">
+              <div class="col-sm-5">
+                <p class="font-16 font-bold">Bank Name: </p>
+              </div>
+              <div class="col-sm-7">
+                <input type="text" ng-model="accountNumber" class="form-control"/>
+              </div>
+            </div>
+            <div class="row padding-10">
+                <div class="col-sm-5">
+                  <p class="font-16 font-bold">Bank Identification Code (BIC): </p>
+                </div>
+                <div class="col-sm-7">
+                  <input type="text" ng-model="accountIFSC" class="form-control"/>
+                </div>
+              </div>
+              <div class="row padding-10">
+                  <div class="col-sm-5">
+                    <p class="font-16 font-bold">Ireland Bank Account Number(IBAN): </p>
+                  </div>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" ng-model="branchName"/>
+                  </div>
+                </div>
+              <div class="row padding-10">
+                <div class="col-sm-12">
+                    <p class="font-16 font-bold"><span style="padding:5px;"><input type="checkbox" ng-model="terms" ng-disabled="!whetherFirst" id="termsandconditions"/></span> <label for="termsandconditions" class="cursor-pointer">I accept that DZINN cannot be held responsible if my bank details are wrong.</label></p>
+                </div>  
+              </div>    
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary background-color-blue" ng-click="save()" ng-if="!saving">Save changes</button>
+          <button type="button" class="btn btn-primary background-color-blue" ng-if="saving"><i class="fa fa-cog fa-spin"></i></button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% include ./loader %>

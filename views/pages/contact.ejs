@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="mainController" ng-click="hideStuff($event)">
+  <head>
+    <title>Welcome to DZINN</title>
+    <% include ../partials/include %>
+  </head>
+  <body ng-click="categoriesOverlayRemover()">
+    <% include ../partials/topbar %>
+    <div class="main-container">
+        <div class="sub-container">
+          <div class="sub-container-small">
+            <div class="sub-container-small__sections sub-container-small__sections_selected">About</div>
+            <div class="sub-container-small__sections">Help</div>
+            <div class="sub-container-small__sections">Contact</div>
+            <div class="sub-container-small__sections">Terms & Conditions</div>
+          </div>
+          <div class="sub-container-large">
+                <h3 style="color: #1c8de9">About US</h3>
+            <p> DZINN is an Irish owned marketplace for local services. We help customers connect with, and hire, the best suited professionals for all their service needs. Our teams are made up of young, dedicated and highly skilled people, who aim to always ensure a job well done. Whether you’re looking for a plumber, electrician, tutor or cook, you can trust DZINN to get your needs fulfilled. Learn to speak a new language, get a personal trainer or leave for vacation worry-fee knowing your house is safe. We provide solutions for a wide range of personal and professional services. We guarantee 100% satisfaction.</p>
+            <br>
+                <h4 style="color: #1c8de9">Our founders</h4>
+
+<h5 style="text-align: left;"><u>Amir Saeed</u></h5>
+A Business major from AIT, Amir is a successful entrepreneur with intensive experience in various business such as retail, property and courier, and has always wanted to help people and society as a whole by contributing towards building a better future in technology. 
+
+<br>
+Amir’s hobbies include swimming and socialising with friends.
+<br><br>
+<h5 style="text-align: left;"><u>Tushar Sharma</u></h5>
+A highly qualified and experienced engineer, who has immense experience working for the best MNc's in the world. The brains behind DZINN’s concept, Tushar has a MSc in Computer Software and brings with him lots of experienced in designing useful and flawless softwares.
+
+
+<br><br>
+<h5 style="text-align: left;"><u>Shaurya Sharma</u></h5>
+
+Shaurya is a scholar with a Masters level education and brings with him years of hands-on experience in Entrepreneurial Business Development and the corporate world. A hardworking visionary with the passion to drive this start up to the top.
+            
+            </div>
+        </div>
+      </div>
+      <% include ../partials/footer %>
+      <% include ../partials/signUp %>
+      <% include ../partials/bottomBar %>
+  </body>
+  </html>

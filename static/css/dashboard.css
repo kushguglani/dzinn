@@ -1,0 +1,8 @@
+.dashboard-side-bar a,.dashboard-side-bar a:hover,.dashboard-side-bar a:visited,.dashboard-side-bar a:link,.dashboard-side-bar a:active
+{
+    padding:20px;
+    display: block;
+    text-decoration: none;
+    font-size:14px;
+    color:black;
+}

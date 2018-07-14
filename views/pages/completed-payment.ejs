@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-click="hideStuff($event)">
+  <head>
+    <title>Admin Portal</title>
+    <% include ../partials/include %>
+    <link rel="stylesheet" href="css/admin.css"/>
+    <script src="/js/completed-payment.js"></script>
+    </head>
+  <body>
+    <div class="container padding-20">
+        <div class="row">
+            <div class="col-sm-3 background-color-white padding-10">
+                <img src="/icons/logo.png" style="width:100px;"/>
+            </div>
+            <div class="col-sm-9 color-blue-bg">
+                <h4 class="font-bold text-color-white padding-10" style="padding-top:20px;">Pending Payment</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 admin-side-bar-anchors light-grey-color-bg">
+                <a href="/admin">Add Category</a>
+                <a href="/add-subcategory">Add Sub-Category</a>
+                <a href="/process-payment">Pending Payment</a>
+                <a href="/completed-payment" class="color-blue-bg text-color-white">Completed Payment</a>
+                <a href="/post-administration">Post Administration</a>
+                <a href="/edit-category">Edit Category</a>
+                <a href="/edit-sub-category">Edit Sub-Category</a>
+           
+            </div>
+            <div class="col-sm-9" ng-controller="completed-payment">
+                <br/>
+                <div class="row padding-10">
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" placeholder="Search for a task title/transaction ID" ng-keyup="searching()" ng-model="search"/>
+                  </div>
+                </div>
+                <div class="row padding-10" ng-repeat="x in tasks">
+                    <div class="col-sm-12 padding-10 background-color-white">
+                        <p class="font-bold font-18"><a href="/task/{{x._id}}" target="_blank">{{x.title}}</a></p>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <img ng-src="/userImages/{{x.postedBy}}.png" class="cursor-pointer" ng-click="getDetails(x.postedBy)" style="display:block;margin:auto;width:50px;"/>
+                                <p class="font-bold font-12 text-center">{{getUserDetails(x.postedBy)}}</p>
+                            </div>
+                            <div class="col-sm-3" ng-show="!checkVar(x.assignedTo)">
+                                <p style="background-color:#f44336;height:5px;margin-top:20px;"></p>
+                                <p class="text-center font-bold font-12">Not Accepted</p>
+                            </div>
+                            <div class="col-sm-3" ng-show="checkVar(x.assignedTo)">
+                                    <p style="text-align:center;font-size:10px;font-weight:bold;">{{x.transactionId}}</p>
+                                    <p style="background-color:#00e676;height:5px;margin-top:20px;"></p>
+                                    <p style="text-align:center;font-size:12px;font-weight:bold;">&euro; {{getAmount(x.assignedTo,x.messages)}}</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <img src="/icons/logo.png" style="display:block;margin:auto;width:100px;"/>
+                                <p class="text-center font-bold font-12" ng-show="checkVar(x.assignedTo)">Payment Received</p>
+                            </div>
+                            <div class="col-sm-3" ng-show="checkVar(x.reported)">
+                                    <p style="background-color:#f44336;height:5px;margin-top:20px;"></p>
+                                    <p class="text-center font-bold font-12">Failed to do the job</p>
+                                    <p style="text-align:center;font-size:12px;font-weight:bold;">&euro; {{getPayment(x.assignedTo,x.messages)}} (13% Deducted)</p>
+                                  </div>
+                            <div class="col-sm-3" ng-show="checkVar(x.complete)">
+                                    <p style="background-color:#00e676;height:5px;margin-top:20px;"></p>
+                                    <p class="text-center font-bold font-12">Completed</p>
+                                    <p style="text-align:center;font-size:12px;font-weight:bold;">&euro; {{getPayment(x.assignedTo,x.messages)}} (13% Deducted)</p>
+                            </div>
+                            <div class="col-sm-3" ng-show="!checkVar(x.reported)&&!checkVar(x.complete)"></div>
+                            <div class="col-sm-2" ng-if="checkVar(x.assignedTo)">
+                                    <img ng-src="/userImages/{{x.assignedTo}}.png" class="cursor-pointer" ng-click="getDetails(x.assignedTo)" style="display:block;margin:auto;width:50px;"/>
+                                    <p class="font-bold font-12 text-center">{{getUserDetails(x.assignedTo)}}</p>
+                                    <div>
+                                        <button ng-show="(checkVar(x.reported)||checkVar(x.complete))&&!checkVar(x.paymentProcessed)" ng-click="jobComplete(x._id)" class="btn-design padding-10 color-blue-bg text-color-white">Process</button>
+                                        <br/>
+                                        <br/>
+                                        <button ng-show="checkVar(x.reported)" ng-click="revertTask(x._id)" class="btn-design padding-10 color-blue-bg text-color-white">Revert</button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="phoneNumberModal">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title font-bold">User Bank Account Details</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class='container' style="padding:20px;">
+                             <div class="row padding-10">
+                                <div class='container' style="padding:20px;">
+                                    <div class="row padding-10">
+                                      <div class="col-sm-5">
+                                        <p class="font-16 font-bold">Bank Name: </p>
+                                      </div>
+                                      <div class="col-sm-7">
+                                        <input type="text" ng-model="accountNumber" class="form-control" ng-disabled="true"/>
+                                      </div>
+                                    </div>
+                                    <div class="row padding-10">
+                                        <div class="col-sm-5">
+                                          <p class="font-16 font-bold">Bank Identification Code (BIC): </p>
+                                        </div>
+                                        <div class="col-sm-7">
+                                          <input type="text" ng-model="accountIFSC" class="form-control" ng-disabled="true"/>
+                                        </div>
+                                      </div>
+                                      <div class="row padding-10">
+                                          <div class="col-sm-5">
+                                            <p class="font-16 font-bold">Ireland Bank Account Number(IBAN): </p>
+                                          </div>
+                                          <div class="col-sm-7">
+                                            <input type="text" class="form-control" ng-model="branchName" ng-disabled="true"/>
+                                          </div>
+                                        </div>
+                                          
+                                  </div>
+                             </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

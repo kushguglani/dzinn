@@ -1,0 +1,25 @@
+.admin-side-bar-anchors a,.admin-side-bar-anchors a:hover,.admin-side-bar-anchors a:link,.admin-side-bar-anchors a:visited,.admin-side-bar-anchors a:active
+{
+    display:block;
+    padding:10px;
+    width:100%;
+    text-decoration: none;
+    margin:5px;
+ 
+}
+.admin-side-bar-anchors a:hover
+{
+    color:white;
+    background-color:#0d92e5 !important;
+    
+}
+.admin-side-bar-anchors
+{
+    min-height: 500px;
+}
+.category-box
+{
+    padding:5px;
+    border-radius: 5px;
+    background-color: white;
+}

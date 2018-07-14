@@ -1,0 +1,230 @@
+.top-bar
+{
+  background-color: white;
+  box-shadow: 0px 2px 0px #ccc;
+  padding:10px;
+  position: fixed;
+  top:0px;
+  width:100%;
+  z-index:9;
+
+}
+.top-bar-image
+{
+  width:15%;
+  margin-left:10%;
+}
+.top-bar-image img
+{
+  display:block;
+  margin: auto;
+  width:150px;
+}
+.search-box
+{
+  padding-top:10px;
+  width:45%;
+}
+.main-links
+{
+  padding-top:10px;
+  width:30%;
+}
+.search-box input
+{
+  padding:9px;
+  padding-right: 30px;
+  border-top-right-radius:30px;
+  border-bottom-right-radius:30px;
+  background-color: #eee;
+  border:none;
+  z-index:9;
+  display: inline-block;
+  width:60%;
+}
+.search-box span
+{
+  display: inline-block;
+  width: 20%;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  padding:9px;
+  background-color: #e0e0e0;
+  color:#616161;
+  border:none;
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome and Opera */
+                                white-space: nowrap;
+ max-height: 42px;
+ text-overflow: ellipsis;
+}
+.main-search-icon
+{
+  position: absolute;
+  right:22%;
+  top:40%;
+}
+@media all and (max-width:768px)
+{
+  .main-search-icon
+  {
+    position: absolute;
+    right:10%;
+    top:40%;
+  }
+  .search-box span
+  {
+    width:40%;
+  }
+  .search-box input
+  {
+    width:58%;
+  }
+  .menu-button
+  {
+    position: relative;
+    top:10px;
+  }
+}
+@media all and (max-width:320px)
+{
+  .menu-button
+  {
+    position: relative;
+    top:-40px;
+  }
+}
+.main-links a,.main-links a:hover,.main-links a:visited,.main-links a:active,.main-links a:link
+{
+  color:grey;
+  text-decoration: none;
+}
+.main-links>a
+{
+    margin-right: 20px;
+}
+.user-top-overlay
+{
+    position: absolute;
+    top:30px;
+    right:0px;
+    width:200px;
+    background-color: white;
+    border:0.5px solid grey;
+    border-radius: 10px;
+}
+.user-top-overlay span
+{
+    padding:10px;
+    display: block;
+    margin:auto;
+    text-align: left;
+    border-radius: 10px;
+}
+.user-top-overlay span:hover
+{
+    background-color: #bdc3c7;
+    color:white !important;
+}
+.notification-overlay
+{
+  position: absolute;
+  top:30px;
+  right:0px;
+  width:350px;
+  max-height:350px;
+  background-color: white;
+  border-radius: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  text-align: left;
+  z-index:10;
+}
+.notification-row
+{
+  padding:10px;
+}
+.menu-button
+{
+  display:none;
+}
+@media all and (max-width:1068px)
+{
+  .menu-button {
+    position: relative;
+    top: 10px;
+  }
+  .top-bar-image
+  {
+    display: none;
+  }
+  .search-box
+  {
+    width:90%;
+  }
+  .main-links
+  {
+    display: none;
+  }
+  .menu-button
+  {
+    display: block;
+  }
+}
+.side-bar
+{
+  padding:0px;
+  position: fixed;
+  right:0px;
+  height:100%;
+  top:0px;
+  z-index:9;
+  background-color: white;
+  width:0px; 
+  transition: all 0.5s linear;
+}
+.side-bar a
+{
+  display: block;
+  text-align: left;
+  padding:5px;
+  color:grey;
+  text-decoration: none;
+  margin-bottom:20px;
+}
+.search-overlay
+{
+  background-color: white;
+  padding:10px;
+  position: absolute;
+  left:20px;
+  width:70%;
+  border:0.5px solid grey;
+  border-radius: 5px; 
+  display: none;
+  max-height:200px;
+  overflow: auto;
+}
+.search-overlay p
+{
+  padding:10px;
+  border-radius: 5px;
+}
+.search-overlay p:hover
+{
+  cursor: pointer;
+  background-color: grey;
+  color:white !important;
+}
+.categories-overlay div:hover
+{
+  background-color: #e0e0e0;
+  color:#616161;
+  
+}
